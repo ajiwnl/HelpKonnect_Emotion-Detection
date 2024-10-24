@@ -3,8 +3,7 @@ from transformers import AutoTokenizer, TFAutoModelForSequenceClassification
 import tensorflow as tf
 import numpy as np
 
-# Create a Flask app with a custom name
-app = Flask('bert-base-go-emotion')
+app = Flask(__name__)
 
 # Load the Hugging Face model and tokenizer
 model_name = "bhadresh-savani/bert-base-go-emotion"
@@ -65,4 +64,4 @@ def predict():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=true)
