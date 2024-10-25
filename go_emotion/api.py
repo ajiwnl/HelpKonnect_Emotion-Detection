@@ -8,7 +8,7 @@ app = Flask(__name__)
 # Load the Hugging Face model and tokenizer
 model_name = "bhadresh-savani/bert-base-go-emotion"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = TFAutoModelForSequenceClassification.from_pretrained(model_name, from_pt=True)
+model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
 
 # Define emotion labels (for 28 emotion classes)
 emotion_labels = [
@@ -35,13 +35,23 @@ def predict_emotion(text):
 
 
 # Define a route for prediction
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET', 'POST'])
 def predict():
-    data = request.get_json()
-    if 'text' not in data:
-        return jsonify({"error": "No text provided"}), 400
+    if request.method == 'POST':
+        # Expect JSON data for POST requests
+        if request.is_json:
+            data = request.get_json()
+            if 'text' not in data:
+                return jsonify({"error": "No text provided"}), 400
+            text = data['text']
+        else:
+            return jsonify({"error": "Content-Type must be application/json"}), 415
+    elif request.method == 'GET':
+        # For GET requests, read 'text' as a query parameter
+        text = request.args.get('text', None)
+        if not text:
+            return jsonify({"error": "No text provided"}), 400
 
-    text = data['text']
     probabilities, predicted_class = predict_emotion(text)
 
     # Prepare the response
@@ -52,17 +62,18 @@ def predict():
     }
 
     # Get the top 4 emotions
-    top_indices = np.argsort(probabilities)[-4:][::-1]  # Get the top 4 indices
+    top_indices = np.argsort(probabilities)[-4:][::-1]
     top_probabilities = probabilities[top_indices]
 
     for idx in range(len(top_indices)):
         response["top_4_emotions"].append({
             "emotion": emotion_labels[top_indices[idx]],
-            "probability": round(float(top_probabilities[idx]), 2)  # Format to two decimal places
+            "probability": round(float(top_probabilities[idx]), 2)
         })
 
     return jsonify(response)
 
 if __name__ == '__main__':
+    #app.run()
     #app.run(debug=True)
     app.run(host='0.0.0.0', port=5000)
