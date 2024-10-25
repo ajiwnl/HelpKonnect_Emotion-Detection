@@ -8,7 +8,7 @@ app = Flask(__name__)
 # Load the Hugging Face model and tokenizer
 model_name = "bhadresh-savani/bert-base-go-emotion"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
+model = TFAutoModelForSequenceClassification.from_pretrained(model_name, from_pt=True)
 
 # Define emotion labels (for 28 emotion classes)
 emotion_labels = [
