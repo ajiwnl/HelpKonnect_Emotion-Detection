@@ -12,11 +12,11 @@ model = TFAutoModelForSequenceClassification.from_pretrained(model_name, from_pt
 
 # Define emotion labels (for 28 emotion classes)
 emotion_labels = [
-    "admiration", "amusement", "anger", "annoyance", "approval", "caring",
-    "confusion", "curiosity", "desire", "disappointment", "disapproval",
-    "disgust", "embarrassment", "excitement", "fear", "gratitude",
-    "grief", "joy", "love", "nervousness", "optimism", "pride",
-    "realization", "relief", "remorse", "sadness", "surprise", "neutral"
+    "Admiration", "Amusement", "Anger", "Annoyance", "Approval", "Caring",
+    "Confusion", "Curiosity", "Desire", "Disappointment", "Disapproval",
+    "Disgust", "Embarrassment", "Excitement", "Fear", "Gratitude",
+    "Grief", "Joy", "Love", "Nervousness", "Optimism", "Pride",
+    "Realization", "Relief", "Remorse", "Sadness", "Surprise", "Neutral"
 ]
 
 # Function to process the input and make a prediction
